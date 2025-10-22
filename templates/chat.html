@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Chat{% endblock %}
+{% block content %}
+<div class="layout">
+    <section class="card chat-col">
+        <h2>Chat</h2>
+
+        <form method="post" class="send-form">
+            <textarea name="text" rows="3" maxlength="280" placeholder="Nhập tin nhắn (tối đa 280 ký tự)"
+                required></textarea>
+            <div class="send-row">
+                <button class="btn primary" type="submit">Gửi</button>
+                <span class="muted">Tối đa 280 ký tự</span>
+            </div>
+        </form>
+
+        <div class="messages-list">
+            {% if messages %}
+            {% for m in messages %}
+            <div class="message-item">
+                <div class="meta">
+                    <a class="user-link" href="{{ url_for('profile', username=m.username) }}">{{ m.username }}</a>
+                    <time class="time">{{ m.created_at }}</time>
+                </div>
+                <div class="text">{{ m.text }}</div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty">Chưa có tin nhắn nào. Hãy là người gửi đầu tiên!</div>
+            {% endif %}
+        </div>
+
+        <div class="pagination-wrapper">
+            {{ pagination.links }}
+        </div>
+    </section>
+
+    <aside class="card side-col">
+        <h3>Thông tin</h3>
+        <p><strong>Đăng nhập:</strong> {{ session.get('username') }}</p>
+        <p><a class="btn small" href="{{ url_for('logout') }}">Logout</a></p>
+    </aside>
+</div>
+{% endblock %}

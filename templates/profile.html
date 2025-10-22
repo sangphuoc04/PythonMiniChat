@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Hồ sơ - {{ user.username }}{% endblock %}
+{% block content %}
+<section class="card profile-card">
+    <h2>Hồ sơ: {{ user.username }}</h2>
+
+    <dl class="profile-data">
+        <dt>Username</dt>
+        <dd>{{ user.username }}</dd>
+        <dt>Tham gia</dt>
+        <dd>{{ user.created_at }}</dd>
+        <dt>Số tin nhắn</dt>
+        <dd>{{ msg_count }}</dd>
+    </dl>
+
+    <p><a class="btn" href="{{ url_for('chat') }}">Quay về Chat</a></p>
+</section>
+{% endblock %}

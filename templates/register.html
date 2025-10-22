@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Đăng ký{% endblock %}
+{% block content %}
+<section class="card auth-card">
+    <h2>Đăng ký</h2>
+    <form method="post" class="form">
+        <label class="form-row">
+            <span>Username</span>
+            <input name="username" type="text" required>
+        </label>
+
+        <label class="form-row">
+            <span>Password</span>
+            <input name="password" type="password" required>
+        </label>
+
+        <label class="form-row">
+            <span>Confirm Password</span>
+            <input name="confirm_password" type="password" required>
+        </label>
+
+        <div class="form-actions">
+            <button type="submit" class="btn primary">Register</button>
+            <a class="link" href="{{ url_for('login') }}">Đã có tài khoản? Đăng nhập</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

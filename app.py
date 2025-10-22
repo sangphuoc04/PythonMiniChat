@@ -6,8 +6,18 @@ from datetime import timedelta, datetime
 from flask_paginate import Pagination, get_page_args
 
 
+import os
+
 app = Flask(__name__)
-app.secret_key = "sag"  
+# Generate a secure random secret key if it doesn't exist
+if not os.path.exists('.secret_key'):
+    with open('.secret_key', 'wb') as f:
+        f.write(os.urandom(32))
+
+# Load the secret key
+with open('.secret_key', 'rb') as f:
+    app.secret_key = f.read()
+
 app.permanent_session_lifetime = timedelta(days=1)
 
 
@@ -43,7 +53,7 @@ def register():
         password = request.form.get('password','')
         confirm = request.form.get('confirm_password','')
 
-        # Validate
+  
         if not username or not password or not confirm:
             flash("Vui lòng điền đầy đủ thông tin.", "danger")
             return render_template('register.html')
@@ -58,7 +68,8 @@ def register():
             flash("Tên người dùng đã tồn tại. Vui lòng chọn tên khác.", "danger")
             return render_template('register.html')
 
-        pw_hash = generate_password_hash(password)
+        # Generate password hash with stronger parameters
+        pw_hash = generate_password_hash(password, method='pbkdf2:sha256:260000')
         users_col.insert_one({
             "username": username,
             "password_hash": pw_hash,
@@ -122,14 +133,18 @@ def chat():
     if per_page is None or per_page <= 0:
         per_page = 10
     total = messages_col.count_documents({})
-    cursor = messages_col.find().sort("created_at", DESCENDING).skip(offset).limit(per_page)
+    cursor = messages_col.find().sort("created_at", -1).skip(offset).limit(per_page)  # -1 for DESCENDING to get newest first
 
     messages = []
     for m in cursor:
+        created_at = m.get("created_at")
+        if created_at:
+            # Format timestamp to local Vietnam time
+            created_at = created_at + timedelta(hours=7)  # UTC+7
         messages.append({
             "username": m.get("username"),
             "text": m.get("text"),
-            "created_at": m.get("created_at")
+            "created_at": created_at
         })
     # pagination object for template
     pagination = Pagination(page=page, per_page=per_page, total=total, record_name='messages', css_framework='bootstrap4')

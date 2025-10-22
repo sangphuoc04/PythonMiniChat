@@ -6,10 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{% block title %}Mini Chat{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-    <!-- Font Awesome for icons -->
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Auto-resize textareas
+            const txts = document.querySelectorAll('textarea');
+            txts.forEach(txt => {
+                txt.setAttribute('style', 'height:' + (txt.scrollHeight) + 'px;overflow-y:hidden;');
+                txt.addEventListener("input", OnInput, false);
+            });
+
+            function OnInput() {
+                this.style.height = 0;
+                this.style.height = (this.scrollHeight) + 'px';
+            }
+
+            // Auto-scroll messages to bottom
+            const messagesContainer = document.querySelector('.messages-container');
+            if (messagesContainer) {
+                messagesContainer.scrollTop = 0;  // For column-reverse, 0 is the bottom
+
+                // Also scroll when submitting new messages
+                const sendForm = document.querySelector('.send-form');
+                if (sendForm) {
+                    sendForm.addEventListener('submit', () => {
+                        setTimeout(() => {
+                            messagesContainer.scrollTop = 0;  // Scroll to bottom (0 in reversed container)
+                        }, 100);
+                    });
+                }
+            }
+        });
+
+
         function togglePassword(inputId, buttonId) {
             const input = document.getElementById(inputId);
             const button = document.getElementById(buttonId);
@@ -57,7 +88,7 @@
 
     <footer class="site-footer">
         <div class="container">
-            <small>Mini Chat — Demo học tập</small>
+            <small>Mini Chat — Cùng nhau gắn kết</small>
         </div>
     </footer>
 </body>

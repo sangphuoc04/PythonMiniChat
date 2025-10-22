@@ -3,42 +3,73 @@
 {% block content %}
 <div class="layout">
     <section class="card chat-col">
-        <h2>Chat</h2>
+        <div class="chat-header">
+            <h2>Chat Room</h2>
+            <div class="chat-actions">
+                <span class="online-status">
+                    <i class="fa-solid fa-circle"></i>
+                    {{ session.get('username') }}
+                </span>
+            </div>
+        </div>
+
+        <div class="messages-container">
+            <div class="messages-list">
+                {% if messages %}
+                {% for m in messages|reverse %}
+                <div
+                    class="message-wrapper {% if m.username == session.get('username') %}message-sent{% else %}message-received{% endif %}">
+                    <div class="message-avatar">
+                        <div class="avatar">{{ m.username[0]|upper if m.username else '?' }}</div>
+                    </div>
+                    <div class="message-content">
+                        <div class="message-item">
+                            {% if m.username != session.get('username') %}
+                            <div class="message-sender">{{ m.username }}</div>
+                            {% endif %}
+                            <div class="message-bubble">{{ m.text }}</div>
+                            <time class="message-time" title="{{ m.created_at if m.created_at }}">
+                                {{ m.created_at.strftime('%H:%M') if m.created_at else '' }}
+                            </time>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="empty">
+                    <i class="fa-regular fa-comments"></i>
+                    <p>Chưa có tin nhắn nào. Hãy là người gửi đầu tiên!</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="pagination-wrapper">
+                {{ pagination.links }}
+            </div>
+        </div>
 
         <form method="post" class="send-form">
-            <textarea name="text" rows="3" maxlength="280" placeholder="Nhập tin nhắn (tối đa 280 ký tự)"
-                required></textarea>
-            <div class="send-row">
-                <button class="btn primary" type="submit">Gửi</button>
-                <span class="muted">Tối đa 280 ký tự</span>
+            <div class="send-input-wrapper">
+                <textarea name="text" rows="1" maxlength="280" placeholder="Nhập tin nhắn..." required></textarea>
+                <button type="submit" class="send-button">
+                    <i class="fa-regular fa-paper-plane"></i>
+                </button>
             </div>
         </form>
-
-        <div class="messages-list">
-            {% if messages %}
-            {% for m in messages %}
-            <div class="message-item">
-                <div class="meta">
-                    <a class="user-link" href="{{ url_for('profile', username=m.username) }}">{{ m.username }}</a>
-                    <time class="time">{{ m.created_at }}</time>
-                </div>
-                <div class="text">{{ m.text }}</div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <div class="empty">Chưa có tin nhắn nào. Hãy là người gửi đầu tiên!</div>
-            {% endif %}
-        </div>
-
-        <div class="pagination-wrapper">
-            {{ pagination.links }}
-        </div>
     </section>
 
     <aside class="card side-col">
         <h3>Thông tin</h3>
-        <p><strong>Đăng nhập:</strong> {{ session.get('username') }}</p>
-        <p><a class="btn small" href="{{ url_for('logout') }}">Logout</a></p>
+        <div class="user-info">
+            <div class="user-avatar">{{ session.get('username')[0]|upper if session.get('username') else '?' }}</div>
+            <div class="user-details">
+                <strong>{{ session.get('username') }}</strong>
+                <a class="btn small danger" href="{{ url_for('logout') }}">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Đăng xuất
+                </a>
+            </div>
+        </div>
     </aside>
 </div>
 {% endblock %}

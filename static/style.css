@@ -83,6 +83,30 @@ body{
   border:1px solid #d1d5db;
   border-radius:6px;
   font-size:14px;
+  width:100%;
+}
+/* Password input container */
+.password-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+/* Password toggle button */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--primary);
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.password-toggle:hover {
+  opacity: 1;
 }
 .form-actions{
   display:flex;

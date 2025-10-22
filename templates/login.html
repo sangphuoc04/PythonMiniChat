@@ -11,7 +11,13 @@
 
         <label class="form-row">
             <span>Password</span>
-            <input name="password" type="password" required>
+            <div class="password-input">
+                <input id="loginPassword" name="password" type="password" required>
+                <button type="button" id="loginToggle" class="password-toggle"
+                    onclick="togglePassword('loginPassword', 'loginToggle')">
+                    <i class="fa-regular fa-eye"></i>
+                </button>
+            </div>
         </label>
 
         <div class="form-actions">

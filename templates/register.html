@@ -11,12 +11,24 @@
 
         <label class="form-row">
             <span>Password</span>
-            <input name="password" type="password" required>
+            <div class="password-input">
+                <input id="registerPassword" name="password" type="password" required>
+                <button type="button" id="registerToggle" class="password-toggle"
+                    onclick="togglePassword('registerPassword', 'registerToggle')">
+                    <i class="fa-regular fa-eye"></i>
+                </button>
+            </div>
         </label>
 
         <label class="form-row">
             <span>Confirm Password</span>
-            <input name="confirm_password" type="password" required>
+            <div class="password-input">
+                <input id="confirmPassword" name="confirm_password" type="password" required>
+                <button type="button" id="confirmToggle" class="password-toggle"
+                    onclick="togglePassword('confirmPassword', 'confirmToggle')">
+                    <i class="fa-regular fa-eye"></i>
+                </button>
+            </div>
         </label>
 
         <div class="form-actions">
